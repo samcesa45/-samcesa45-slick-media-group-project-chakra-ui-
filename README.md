@@ -26,5 +26,5 @@ You can view a demo for this site
 
 ### `Screeenshot`
 
-[![Screenshot-496.png](https://i.postimg.cc/YCWFZVF3/Screenshot-496.png)](https://postimg.cc/HrTj76Bc)
+[![Screenshot-496.png](https://i.postimg.cc/MTQV2Fgx/Screenshot-496.png)](https://postimg.cc/JDRGjP1d)
 
