@@ -23,7 +23,6 @@ export const App = () => {
   useEffect(()=>{
     movieService.getAllMovies(input)
     .then(returnedMovie => {
-      console.log(returnedMovie)
            setmovies(returnedMovie.data.Search)
     })
     .catch(err => console.error(err)
