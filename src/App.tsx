@@ -1,38 +1,62 @@
-import * as React from "react"
+import React,{useEffect, useState} from 'react'
 import {
   ChakraProvider,
   Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
   theme,
+  SimpleGrid,
 } from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import { Container } from '@chakra-ui/react'
+import Header from "./components/Header"
+import Search from "./components/Search"
+import Movie from "./components/Movie"
+import { movieService } from './services/movie'
+import { MovieProps,SearchProps } from './types/types'
 
-export const App = () => (
+
+
+
+export const App = () => {
+   const [movies, setmovies] = useState<SearchProps[]>([])
+   const [input, setInput] = useState('batman')
+   const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)
+
+  useEffect(()=>{
+    movieService.getAllMovies(input)
+    .then(returnedMovie => {
+      console.log(returnedMovie)
+           setmovies(returnedMovie.data.Search)
+    })
+    .catch(err => console.error(err)
+      )
+  },[input])
+
+const filteredInput = movies && movies.filter((movie:SearchProps) => {
+  if(input){
+     return movie.Title.toLowerCase().includes(input.toLowerCase()) 
+  
+  }
+
+   return []
+})
+ 
+  return (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
+    <Box>
+        <Header/>
     </Box>
+    <Container maxW='1200px'>
+      <Box paddingTop="10" paddingBottom='10'>
+      <Search input={input} handleInputChange={handleInputChange}/>
+      </Box>
+      <Box>
+        <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(150px, 1fr))'>
+        { filteredInput?.map((movie:MovieProps) =>(
+            <Movie key={movie.imdbID} movie={movie}/>
+        ))}
+        </SimpleGrid>
+      </Box>
+    </Container>
   </ChakraProvider>
 )
+
+}
